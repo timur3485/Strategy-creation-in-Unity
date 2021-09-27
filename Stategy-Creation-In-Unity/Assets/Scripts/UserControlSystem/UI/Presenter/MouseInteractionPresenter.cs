@@ -7,6 +7,12 @@ public sealed class MouseInteractionPresenter : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
     [SerializeField] private SelectableValue _selectedObject;
+    [SerializeField] private SelectObject _selectObject;
+
+
+    private Shader _outlineShader, _targetShader;
+
+    
 
     private void Update()
     {
@@ -19,6 +25,7 @@ public sealed class MouseInteractionPresenter : MonoBehaviour
         {
             return;
         }
+        _selectObject.Action(hits);
         var selectable = hits
             .Select(hit => hit.collider.GetComponentInParent<ISelectable>())
             .FirstOrDefault(c => c != null);
