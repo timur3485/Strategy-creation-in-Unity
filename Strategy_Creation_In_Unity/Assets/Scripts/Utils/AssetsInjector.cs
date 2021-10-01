@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Reflection;
+using Utils;
 
-namespace Utils
+public static class AssetsInjector
 {
-    public static class AssetsInjector
+    private static readonly Type _injectAssetAttributeType = typeof(InjectAssetAttribute);
+
+    public static T Inject<T>(this AssetsContext context, T target)
     {
-        private static readonly Type _injectAssetAttributeType = typeof(InjectAssetAttribute);
-        
-        public static T Inject<T>(this AssetsContext context, T target)
+        var targetType = target.GetType();
+        while (targetType != null)
         {
-            var targetType = target.GetType();
-            var allFields = targetType.GetFields(BindingFlags.NonPublic 
-                                                 | BindingFlags.Public 
-                                                 | BindingFlags.Instance
-                                                 );
+            var allFields = targetType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
             for (int i = 0; i < allFields.Length; i++)
             {
@@ -25,9 +23,12 @@ namespace Utils
                 }
                 var objectToInject = context.GetObjectOfType(fieldInfo.FieldType, injectAssetAttribute.AssetName);
                 fieldInfo.SetValue(target, objectToInject);
-            }	
+            }
 
-            return target;
+            targetType = targetType.BaseType;
         }
+
+        return target;
     }
 }
+
