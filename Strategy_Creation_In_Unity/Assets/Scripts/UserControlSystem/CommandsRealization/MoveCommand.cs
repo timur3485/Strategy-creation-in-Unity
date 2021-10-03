@@ -1,11 +1,15 @@
-using Abstractions.Commands.CommandsInterfaces;
+﻿using Abstractions.Commands.CommandsInterfaces;
 using UnityEngine;
-using Utils;
 
-public class MoveCommand : IMoveCommand
+namespace UserControlSystem.CommandsRealization
 {
-    public void Move()
+    public sealed class MoveCommand : IMoveCommand
     {
-        Debug.Log("I am Moving");
+        public Vector3 Target { get; }
+        
+        public MoveCommand(Vector3 target)
+        {
+            Target = target;
+        }
     }
 }

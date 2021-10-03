@@ -1,14 +1,19 @@
-using Abstractions;
+﻿using Abstractions;
 using UnityEngine;
 
-public class MainUnit : MonoBehaviour, ISelectable
+namespace Core
 {
-	public float Health => _health;
-	public float MaxHealth => _maxHealth;
-	public Sprite Icon => _icon;
+    public class MainUnit : MonoBehaviour, ISelectable, IAttackable
+    {
+        public float Health => _health;
+        public float MaxHealth => _maxHealth;
+        public Transform PivotPoint => _pivotPoint;
+        public Sprite Icon => _icon;
 
-	[SerializeField] private float _maxHealth = 100;
-	[SerializeField] private Sprite _icon;
+        [SerializeField] private float _maxHealth = 100;
+        [SerializeField] private Sprite _icon;
+        [SerializeField] private Transform _pivotPoint;
 
-	private float _health = 100;
+        private float _health = 100;
+    }
 }

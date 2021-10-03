@@ -1,11 +1,9 @@
-using Abstractions.Commands.CommandsInterfaces;
-using UnityEngine;
-using Utils;
+﻿using Abstractions.Commands.CommandsInterfaces;
 
-public class StopCommand : IStopCommand
+namespace UserControlSystem.CommandsRealization
 {
-    public void Stop()
+    public sealed class StopCommand : IStopCommand
     {
-        Debug.Log("I am Stoped");
+        
     }
 }

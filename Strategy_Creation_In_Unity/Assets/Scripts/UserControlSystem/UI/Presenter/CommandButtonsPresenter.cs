@@ -7,6 +7,7 @@ using UnityEngine;
 using UserControlSystem.CommandsRealization;
 using UserControlSystem.UI.View;
 using Utils;
+using Zenject;
 
 namespace UserControlSystem.UI.Presenter
 {
@@ -14,16 +15,18 @@ namespace UserControlSystem.UI.Presenter
     {
         [SerializeField] private SelectableValue _selectable;
         [SerializeField] private CommandButtonsView _view;
-        [SerializeField] private AssetsContext _context;
-
+        [Inject] private CommandButtonsModel _model;
         private ISelectable _currentSelectable;
-
+        
         private void Start()
         {
-            _selectable.OnSelected += ONSelected;
-            ONSelected(_selectable.CurrentValue);
+            _view.OnClick += _model.OnCommandButtonClicked;
+            _model.OnCommandSent += _view.UnblockAllInteractions;
+            _model.OnCommandCancel += _view.UnblockAllInteractions;
+            _model.OnCommandAccepted += _view.BlockInteractions;
 
-            _view.OnClick += ONButtonClick;
+            _selectable.OnNewValue += ONSelected;
+            ONSelected(_selectable.CurrentValue);
         }
 
         private void ONSelected(ISelectable selectable)
@@ -31,6 +34,10 @@ namespace UserControlSystem.UI.Presenter
             if (_currentSelectable == selectable)
             {
                 return;
+            }
+            if (_currentSelectable != null)
+            {
+                _model.OnSelectionChanged();
             }
             _currentSelectable = selectable;
 
@@ -41,56 +48,6 @@ namespace UserControlSystem.UI.Presenter
                 commandExecutors.AddRange((selectable as Component).GetComponentsInParent<ICommandExecutor>());
                 _view.MakeLayout(commandExecutors);
             }
-        }
-
-        private void ONButtonClick(ICommandExecutor commandExecutor)
-        {
-            if (commandExecutor as CommandExecutorBase<IProduceUnitCommand>)
-            {
-                var unitProducer = commandExecutor as CommandExecutorBase<IProduceUnitCommand>;
-                if (unitProducer != null)
-                {
-                    unitProducer.ExecuteSpecificCommand(_context.Inject(new ProduceUnitCommandHeir()));
-                    return;
-                }
-
-            }
-            else if (commandExecutor as CommandExecutorBase<IAttackCommand>)
-            {
-                var unitProducer = commandExecutor as CommandExecutorBase<IAttackCommand>;
-                if (unitProducer != null)
-                {
-                    unitProducer.ExecuteSpecificCommand(new AttackUnitCommand());
-                    return;
-                }
-            }else if (commandExecutor as CommandExecutorBase<IMoveCommand>)
-            {
-                var unitProducer = commandExecutor as CommandExecutorBase<IMoveCommand>;
-                if (unitProducer != null)
-                {
-                    unitProducer.ExecuteSpecificCommand(new MoveCommand());
-                    return;
-                }
-            }else if (commandExecutor as CommandExecutorBase<IPatrolCommand>)
-            {
-                var unitProducer = commandExecutor as CommandExecutorBase<IPatrolCommand>;
-                if (unitProducer != null)
-                {
-                    unitProducer.ExecuteSpecificCommand(new PatrolCommand());
-                    return;
-                }
-            }else if (commandExecutor as CommandExecutorBase<IStopCommand>)
-            {
-                var unitProducer = commandExecutor as CommandExecutorBase<IStopCommand>;
-                if (unitProducer != null)
-                {
-                    unitProducer.ExecuteSpecificCommand(new StopCommand());
-                    return;
-                }
-            }
-
-            throw new ApplicationException($"{nameof(CommandButtonsPresenter)}.{nameof(ONButtonClick)}: " +
-                                           $"Unknown type of commands executor: {commandExecutor.GetType().FullName}!");
         }
     }
 }

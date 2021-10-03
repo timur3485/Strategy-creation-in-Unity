@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Reflection;
-using Utils;
 
-public static class AssetsInjector
+namespace Utils
 {
-    private static readonly Type _injectAssetAttributeType = typeof(InjectAssetAttribute);
-
-    public static T Inject<T>(this AssetsContext context, T target)
+    public static class AssetsInjector
     {
-        var targetType = target.GetType();
-        while (targetType != null)
+        private static readonly Type _injectAssetAttributeType = typeof(InjectAssetAttribute);
+        
+        public static T Inject<T>(this AssetsContext context, T target)
         {
-            var allFields = targetType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-
-            for (int i = 0; i < allFields.Length; i++)
+            var targetType = target.GetType();
+            while (targetType != null)
             {
-                var fieldInfo = allFields[i];
-                var injectAssetAttribute = fieldInfo.GetCustomAttribute(_injectAssetAttributeType) as InjectAssetAttribute;
-                if (injectAssetAttribute == null)
+                var allFields = targetType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+
+                for (int i = 0; i < allFields.Length; i++)
                 {
-                    continue;
+                    var fieldInfo = allFields[i];
+                    var injectAssetAttribute = fieldInfo.GetCustomAttribute(_injectAssetAttributeType) as InjectAssetAttribute;
+                    if (injectAssetAttribute == null)
+                    {
+                        continue;
+                    }
+                    var objectToInject = context.GetObjectOfType(fieldInfo.FieldType, injectAssetAttribute.AssetName);
+                    fieldInfo.SetValue(target, objectToInject);
                 }
-                var objectToInject = context.GetObjectOfType(fieldInfo.FieldType, injectAssetAttribute.AssetName);
-                fieldInfo.SetValue(target, objectToInject);
+
+                targetType = targetType.BaseType;
             }
 
-            targetType = targetType.BaseType;
+            return target;
         }
-
-        return target;
     }
 }
-

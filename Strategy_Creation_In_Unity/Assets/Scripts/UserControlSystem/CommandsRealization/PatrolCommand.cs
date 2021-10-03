@@ -1,11 +1,17 @@
-using Abstractions.Commands.CommandsInterfaces;
+﻿using Abstractions.Commands.CommandsInterfaces;
 using UnityEngine;
-using Utils;
 
-public class PatrolCommand : IPatrolCommand
+namespace UserControlSystem.CommandsRealization
 {
-    public void Patrol()
+    public sealed class PatrolCommand : IPatrolCommand
     {
-        Debug.Log("I am Patroling");
+        public Vector3 From { get; }
+        public Vector3 To { get; }
+
+        public PatrolCommand(Vector3 @from, Vector3 to)
+        {
+            From = @from;
+            To = to;
+        }
     }
 }
