@@ -2008,11 +2008,11 @@ GameObject:
   m_Component:
   - component: {fileID: 721545272210510094}
   - component: {fileID: 721545272218271468}
-  - component: {fileID: 5326469732683765265}
   - component: {fileID: 9200017180993829334}
   - component: {fileID: 8108533962382586849}
   - component: {fileID: 1877076007434310192}
   - component: {fileID: 3832294216901703734}
+  - component: {fileID: 327911408666387861}
   m_Layer: 0
   m_Name: Chomper
   m_TagString: Untagged
@@ -2056,20 +2056,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5326469732683765265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 721545272211000622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14f0805e42f8152418d815237e7dfb5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 500
-  _icon: {fileID: 0}
 --- !u!114 &9200017180993829334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2118,6 +2104,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd3720dff3c5024db84ee48afb8ebdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &327911408666387861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721545272211000622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52110f5923f64f9f9c56c6bf5e59c124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
+  _icon: {fileID: 21300000, guid: 9908913e928c42d4f9f1891893bbc424, type: 3}
+  _pivotPoint: {fileID: 721545272210510094}
 --- !u!1 &721545272211000624
 GameObject:
   m_ObjectHideFlags: 0
